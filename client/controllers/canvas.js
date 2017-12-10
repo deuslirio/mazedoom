@@ -19,26 +19,10 @@ import '/client/controllers/maze_gen.js';
 
 import '/client/controllers/player_vision.js';
 import '/client/controllers/matriz_forma_normal.js';
+import '/client/controllers/movement.js';
 
 
 // console.log(map_vision);
-
-
-// var map_vision = [
-//                              [0],
-//                           [0, 0, 0],
-//                        [0, 0, 0, 1, 1],
-//                     [0, 0, 0, 0, 1, 0, 0],
-//                  [0, 0, 0, 0, 0, 1, 0, 0, 0],
-//               [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-//            [0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0],
-//         [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-//      [0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-// [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-//
-//
-//
-// ]
 
 // console.log(vision_d);
 
@@ -51,7 +35,7 @@ Template.canvas.onCreated(function canvasOnCreated() {
   map = generate();
 
 
-//  console.log(map);
+  //  console.log(map);
 
 
 });
@@ -97,10 +81,11 @@ Template.canvas.helpers({
 
 Template.body.events({
   "keypress": function(e, data, tpl) {
-    console.log('key', e);
+    console.log(e);
     if (e.keyCode === 37) {
-      vision_indice = 0;
-       update_canvas();
+      vision_indice = (vision_indice + 7) % 8;
+      console.log(vision_indice);
+      update_canvas();
       return false;
 
     }
@@ -110,10 +95,10 @@ Template.body.events({
 
       return false;
     }
-    if (e.keyCode=== 39) {
+    if (e.keyCode === 39) {
 
-      vision_indice = 4;
-
+      vision_indice = (vision_indice + 1) % 8;
+      console.log(vision_indice);
       update_canvas();
       return false;
     }
@@ -122,6 +107,42 @@ Template.body.events({
 
       update_canvas();
       return false;
+    }
+    if (e.key == "d"||e.key == "D") {
+      // console.log(map)
+      map=m_direita(map);
+      Meteor.call('log', map, function(error, result) {});
+
+      update_canvas();
+      return false;
+
+    }
+    if (e.key == "w"||e.key == "W") {
+      // console.log(map)
+      map=m_frente(map);
+      Meteor.call('log', map, function(error, result) {});
+
+      update_canvas();
+      return false;
+
+    }
+    if (e.key == "a"||e.key == "A") {
+      // console.log(map)
+      map=m_esquerda(map);
+      Meteor.call('log', map, function(error, result) {});
+
+      update_canvas();
+      return false;
+
+    }
+    if (e.key == "s"||e.key == "S") {
+      // console.log(map)
+      map=m_tras(map);
+      Meteor.call('log', map, function(error, result) {});
+
+      update_canvas();
+      return false;
+
     }
     // e -> jquery event
     // data -> Blaze data context of the DOM element triggering the event handler
@@ -142,9 +163,9 @@ Template.body.events({
 //    },
 //
 // });
-update_canvas=function(){
+update_canvas = function() {
   //console.log(vision_indice)
-  Meteor.call('log', map, function(error, result) {});
+  // Meteor.call('log', map, function(error, result) {});
   canvas.clear();
 
 
@@ -155,14 +176,15 @@ update_canvas=function(){
     fill: '#aaaaaa',
     width: canvas.width,
     height: canvas.height / 2,
-    centeredScaling: true
+    centeredScaling: true,
+    strokeWidth: 0
   });
 
   roof.setGradient('fill', {
     x1: 0,
     y1: 0,
     x2: 0,
-    y2: canvas.height,
+    y2: 1 + canvas.height / 2,
     colorStops: {
       0: '#001528',
       1: '#000'
@@ -174,10 +196,12 @@ update_canvas=function(){
   let floor = new fabric.Rect({
     left: 0,
     top: canvas.height / 2,
-    // fill: '#666',
+    fill: '#aaaaaa',
     width: canvas.width,
     height: canvas.height / 2,
-    centeredScaling: true
+    centeredScaling: true,
+    strokeWidth: 0
+
   });
 
   floor.setGradient('fill', {
@@ -187,19 +211,19 @@ update_canvas=function(){
     y2: canvas.height,
     colorStops: {
       0: '#000',
-      1: '#fff'
+      1: '#001528'
     }
   });
 
-  function loadPattern(url) {
-    fabric.util.loadImage(url, function(img) {
-      floor.set('fill', new fabric.Pattern({
-        source: img,
-        repeat: 'repeat'
-      }));
-      canvas.renderAll();
-    });
-  }
+  // function loadPattern(url) {
+  //   fabric.util.loadImage(url, function(img) {
+  //     floor.set('fill', new fabric.Pattern({
+  //       source: img,
+  //       repeat: 'repeat'
+  //     }));
+  //     canvas.renderAll();
+  //   });
+  // }
   // loadPattern('/images/grass_pattern.jpg');
   // loadPattern('/images/stonesmin.png')
   canvas.add(floor);
@@ -212,9 +236,10 @@ update_canvas=function(){
   vision_v = vision(map);
   // console.log(vision_v);
   vision_d = vision_dist(vision_v);
+  // Meteor.call('log', vision_d, function(error, result) {});
+
   vision_v = matriz_f_n(vision_v);
   vision_d = vision_dist(vision_v);
-  // Meteor.call('log', vision_d, function(error, result) {});
   for (let i = vision_v.length - 1; i > 0; i--) {
     for (let j = 0; j < vision_v[i].length; j++) {
 
@@ -228,9 +253,9 @@ update_canvas=function(){
           fill: 'rgb(' + 255 / i + ',0,0)',
           width: canvas.width / vision_v[i].length,
           height: canvas.height / i,
-
           originY: 'center',
-          centeredScaling: true
+          centeredScaling: true,
+          strokeWidth: 0
         });
         canvas.add(rect);
       }

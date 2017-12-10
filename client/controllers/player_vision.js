@@ -1,4 +1,4 @@
-vision_indice = 6;
+vision_indice = 7;
 var x;
 var y;
 
@@ -46,15 +46,24 @@ function matriz_dist(matriz) {
   // console.log(x, y);
   for (var i = 0; i < m_aux.length; i++) {
     for (var j = 0; j < m_aux[i].length; j++) {
-      if (Math.abs(i) > Math.abs(j))
+      if (vision_indice % 2 == 0) {
+        if (Math.abs(i) > Math.abs(j)) {
 
-        m_aux[i][j] = Math.abs(y) - Math.abs(j)
+          m_aux[i][j] = Math.abs(y) - Math.abs(j)
 
-      else
+        } else {
 
-        m_aux[i][j] = Math.abs(x) - Math.abs(i)
+          m_aux[i][j] = Math.abs(x) - Math.abs(i)
 
-      // m_aux[i][j] = Math.floor( Math.sqrt(  Math.pow(x - i, 2) + Math.pow(y - j, 2) )  );
+          // m_aux[i][j] = Math.floor( Math.sqrt(  Math.pow(x - i, 2) + Math.pow(y - j, 2) )  );
+        }
+      } else {
+        if (vision_indice == 3 || vision_indice == 7)
+          m_aux[i][j] = Math.abs(Math.abs(y) - Math.abs(j));
+        else if (vision_indice == 1 || vision_indice == 5)
+          m_aux[i][j] = Math.abs(Math.abs(x) - Math.abs(i));
+
+      }
     }
   }
 
@@ -81,21 +90,25 @@ function matriz_vision(m) {
       result_matriz = get_sub_matriz(m, x - 9, y - 9, x + 1, y + 1);
       break;
     case 1:
+      result_matriz = get_sub_matriz(m, x - 9, y - 5, x + 1, y + 5);
       break;
     case 2:
       result_matriz = get_sub_matriz(m, x - 9, y, x + 1, y + 10);
       break;
     case 3:
+      result_matriz = get_sub_matriz(m, x - 5, y, x + 5, y + 10);
       break;
     case 4:
       result_matriz = get_sub_matriz(m, x, y, x + 10, y + 10);
       break;
     case 5:
+      result_matriz = get_sub_matriz(m, x, y - 5, x + 10, y + 5);
       break;
     case 6:
       result_matriz = get_sub_matriz(m, x, y - 9, x + 10, y + 1);
       break;
     case 7:
+      result_matriz = get_sub_matriz(m, x - 5, y - 9, x + 5, y + 1);
       break;
     default:
 
