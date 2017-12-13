@@ -12,58 +12,58 @@ m_direita = function(m) {
       }
     }
   }
-  // console.log(x,y);
+  console.log(x,y);
   switch (vision_indice) {
     case 0:
-      if (m[x - 1][y + 1] == 0) {
-        m[x][y] = 0;
+      if (m[x - 1][y + 1] != 1) {
+        m[x][y] = 2;
         m[x - 1][y + 1] = 'P';
       }
 
       break;
     case 1:
-      if (m[x][y + 1] == 0) {
-        m[x][y] = 0;
+      if (m[x][y + 1] != 1) {
+        m[x][y] = 2;
         m[x][y + 1] = 'P';
       }
 
       break;
     case 2:
-      if (m[x + 1][y + 1] == 0) {
-        m[x][y] = 0;
+      if (m[x + 1][y + 1] != 1) {
+        m[x][y] = 2;
         m[x + 1][y + 1] = 'P';
       }
       break;
     case 3:
-      if (m[x + 1][y] == 0) {
-        m[x][y] = 0;
+      if (m[x + 1][y] != 1) {
+        m[x][y] = 2;
         m[x + 1][y] = 'P';
       }
       break;
     case 4:
-      if (m[x + 1][y - 1] == 0) {
-        m[x][y] = 0;
+      if (m[x + 1][y - 1] != 1) {
+        m[x][y] = 2;
         m[x + 1][y - 1] = 'P';
       }
       break;
     case 5:
-      if (m[x][y - 1] == 0) {
+      if (m[x][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y - 1] = 'P';
       }
       break;
     case 6:
-      if (m[x - 1][y - 1] == 0) {
+      if (m[x - 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y - 1] = 'P';
       }
       break;
     case 7:
-      if (m[x - 1][y] == 0) {
+      if (m[x - 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y] = 'P';
       }
       break;
@@ -86,61 +86,61 @@ m_esquerda = function(m) {
       }
     }
   }
-  // console.log(x,y);
+  console.log(x,y);
   switch (vision_indice) {
     case 0:
-      if (m[x + 1][y - 1] == 0) {
+      if (m[x + 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y - 1] = 'P';
       }
       break;
     case 1:
-      if (m[x][y - 1] == 0) {
+      if (m[x][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y - 1] = 'P';
       }
       break;
     case 2:
-      if (m[x - 1][y - 1] == 0) {
+      if (m[x - 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y - 1] = 'P';
       }
       break;
     case 3:
-      if (m[x - 1][y] == 0) {
+      if (m[x - 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y] = 'P';
       }
       break;
     case 4:
-      if (m[x - 1][y + 1] == 0) {
+      if (m[x - 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y + 1] = 'P';
       }
       break;
     case 5:
-      if (m[x][y + 1] == 0) {
+      if (m[x][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y + 1] = 'P';
       }
       break;
     case 6:
-      if (m[x + 1][y + 1] == 0) {
+      if (m[x + 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y + 1] = 'P';
       }
       break;
     case 7:
-      if (m[x + 1][y] == 0) {
+      if (m[x + 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y] = 'P';
       }
       break;
@@ -162,60 +162,62 @@ m_frente = function(m) {
       }
     }
   }
+  console.log(x,y);
+
   switch (vision_indice) {
     case 0:
-      if (m[x - 1][y - 1] == 0) {
+      if (m[x - 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y - 1] = 'P';
       }
       break;
     case 1:
-      if (m[x - 1][y] == 0) {
+      if (m[x - 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y] = 'P';
       }
       break;
     case 2:
-      if (m[x - 1][y + 1] == 0) {
+      if (m[x - 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y + 1] = 'P';
       }
       break;
     case 3:
-      if (m[x][y + 1] == 0) {
+      if (m[x][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y + 1] = 'P';
       }
       break;
     case 4:
-      if (m[x + 1][y + 1] == 0) {
+      if (m[x + 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y + 1] = 'P';
       }
       break;
     case 5:
-      if (m[x + 1][y] == 0) {
+      if (m[x + 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y] = 'P';
       }
       break;
     case 6:
-      if (m[x + 1][y - 1] == 0) {
+      if (m[x + 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y - 1] = 'P';
       }
       break;
     case 7:
-      if (m[x][y - 1] == 0) {
+      if (m[x][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y - 1] = 'P';
       }
       break;
@@ -240,59 +242,59 @@ m_tras = function(m) {
   }
   switch (vision_indice) {
     case 0:
-      if (m[x + 1][y + 1] == 0) {
+      if (m[x + 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y + 1] = 'P';
       }
       break;
     case 1:
-      if (m[x + 1][y] == 0) {
+      if (m[x + 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y] = 'P';
       }
       break;
     case 2:
-      if (m[x + 1][y - 1] == 0) {
+      if (m[x + 1][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x + 1][y - 1] = 'P';
       }
       break;
     case 3:
-      if (m[x][y - 1] == 0) {
+      if (m[x][y - 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x][y - 1] = 'P';
       }
       break;
     case 4:
-      if (m[x - 1][y + 1] == 0) {
+      if (m[x - 1][y + 1] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y + 1] = 'P';
       }
       break;
     case 5:
-      if (m[x - 1][y] == 0) {
+      if (m[x - 1][y] != 1) {
 
-        m[x][y] = 0;
+        m[x][y] = 2;
         m[x - 1][y] = 'P';
       }
       break;
 
     case 6:
-    if (m[x - 1][y + 1]== 0) {
+    if (m[x - 1][y + 1]!= 1) {
 
-      m[x][y] = 0;
+      m[x][y] = 2;
       m[x - 1][y + 1] = 'P';
     }
       break;
     case 7:
-    if (m[x][y + 1]== 0) {
+    if (m[x][y + 1]!= 1) {
 
-      m[x][y] = 0;
+      m[x][y] = 2;
       m[x][y + 1] = 'P';
     }
       break;

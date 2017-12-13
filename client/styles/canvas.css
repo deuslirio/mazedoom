@@ -1,8 +1,57 @@
 #viewport {
-  height: 500px;
+  /*height: 500px;*/
   left: 0;
   /*position: absolute;*/
   top: 0;
-  width: 500px;
-  overflow: auto;
+  /*width: 500px;*/
+  /*overflow: auto;*/
+  display:inline-flex
+}
+#minimap {
+  /*height: 500px;*/
+  /*left: 0;*/
+  /*position: absolute;*/
+  /*top: 0;*/
+  /*width: 500px;*/
+  /*overflow: auto;*/
+  right: 0;
+  font-size: 6.5px;
+  /*display: flex;*/
+}
+p{
+  margin: 0;
+}
+span{
+  margin:0;
+  /*position: absolute;*/
+}
+.c0{
+  background-color: #000;
+  color: #000;
+  /*height: 15px;*/
+}
+.c1{
+  background-color: #f00;
+  color: #f00;
+  /*height: 15px;*/
+  /*width: 500px;*/
+
+}
+.c2{
+  background-color: #0f0;
+  color: #0f0;
+  /*height: 15px;*/
+
+}
+.c3{
+  background-color: #00f;
+  color: #00f;
+  /*height: 15px;*/
+
+}
+.cP{
+  background-color: #fff;
+  color: #fff;
+  /*height: 15px;*/
+
 }

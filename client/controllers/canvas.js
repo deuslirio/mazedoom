@@ -33,6 +33,8 @@ Template.canvas.onCreated(function canvasOnCreated() {
   // counter starts at 0
   this.counter = new ReactiveVar(0);
   map = generate();
+  Session.set('map', map)
+  
 
 
   //  console.log(map);
@@ -73,15 +75,86 @@ Template.canvas.onRendered(function canvasOnRendered() {
 
 });
 
-Template.canvas.helpers({
-  counter() {
-    return Template.instance().counter.get();
+Template.minimap.helpers({
+  map_length() {
+     return Session.get('map')[0].length;
   },
+  map_line(l) {
+    lines = [];
+    maps = Session.get('map');
+    // for (var i = 0; i < maps.length; i++) {
+      var k = 0;
+      for (var j = 1; j < maps[l].length; j++) {
+        // if (maps[l][j - 1]) {
+          if (maps[l][j] == maps[l][j - 1]) k++
+            else {
+              // lines[i].push()
+              lines.push({
+                'linha': l,
+                'cor': maps[l][j - 1],
+                'numero': k
+              })
+
+              k = 1;
+            // }
+
+        // }
+      }
+    }
+    return lines;
+    // return Session.get('map');
+
+
+  },
+
+  maps() {
+    lines = [];
+    maps = Session.get('map');
+    for (var i = 0; i < maps.length; i++) {
+      var k = 0;
+      for (var j = 1; j < maps[i].length; j++) {
+        // if (maps[i][j - 1]) {
+          if (maps[i][j] == maps[i][j - 1]) k++
+            else {
+              // lines[i].push()
+              lines.push({
+                'linha': i,
+                'cor': maps[i][j - 1],
+                'numero': k
+              })
+
+              k = 1;
+            }
+        // }
+      }
+    }
+    return lines;
+    // return Session.get('map');
+
+
+  },
+
+  arr(a){
+    b=new Array(a)
+    for (var i = 0; i < b.length; i++) {
+      b[i]=i
+    }
+    return b;
+  }
 });
 
 Template.body.events({
   "keypress": function(e, data, tpl) {
-    console.log(e);
+    // console.log(e);
+    // for (let i = 0; i < map.length; i++) {
+    //   // for (let j = 0; j < maps[i].length; j++) {
+    //   //
+    //   // }
+    //   Meteor.call('log', map[i], function(error, result) {});
+    //
+    // }
+
+    Session.set('map', map)
     if (e.keyCode === 37) {
       vision_indice = (vision_indice + 7) % 8;
       console.log(vision_indice);
@@ -108,42 +181,43 @@ Template.body.events({
       update_canvas();
       return false;
     }
-    if (e.key == "d"||e.key == "D") {
+    if (e.key == "d" || e.key == "D") {
       // console.log(map)
-      map=m_direita(map);
-      Meteor.call('log', map, function(error, result) {});
+      map = m_direita(map);
+      // Meteor.call('log', map, function(error, result) {});
 
       update_canvas();
       return false;
 
     }
-    if (e.key == "w"||e.key == "W") {
+    if (e.key == "w" || e.key == "W") {
       // console.log(map)
-      map=m_frente(map);
-      Meteor.call('log', map, function(error, result) {});
+      map = m_frente(map);
+      // Meteor.call('log', map, function(error, result) {});
 
       update_canvas();
       return false;
 
     }
-    if (e.key == "a"||e.key == "A") {
+    if (e.key == "a" || e.key == "A") {
       // console.log(map)
-      map=m_esquerda(map);
-      Meteor.call('log', map, function(error, result) {});
+      map = m_esquerda(map);
+      // Meteor.call('log', map, function(error, result) {});
 
       update_canvas();
       return false;
 
     }
-    if (e.key == "s"||e.key == "S") {
+    if (e.key == "s" || e.key == "S") {
       // console.log(map)
-      map=m_tras(map);
-      Meteor.call('log', map, function(error, result) {});
+      map = m_tras(map);
+      // Meteor.call('log', map, function(error, result) {});
 
       update_canvas();
       return false;
 
     }
+    // e.stopPropagation()
     // e -> jquery event
     // data -> Blaze data context of the DOM element triggering the event handler
     // tpl -> the parent template instance for the target element
@@ -211,7 +285,7 @@ update_canvas = function() {
     y2: canvas.height,
     colorStops: {
       0: '#000',
-      1: '#001528'
+      1: '#bbb'
     }
   });
 
@@ -240,6 +314,7 @@ update_canvas = function() {
 
   vision_v = matriz_f_n(vision_v);
   vision_d = vision_dist(vision_v);
+
   for (let i = vision_v.length - 1; i > 0; i--) {
     for (let j = 0; j < vision_v[i].length; j++) {
 
@@ -251,6 +326,37 @@ update_canvas = function() {
           left: (canvas.width / vision_v[i].length) * j,
           top: canvas.height / 2,
           fill: 'rgb(' + 255 / i + ',0,0)',
+          width: canvas.width / vision_v[i].length,
+          height: canvas.height / i,
+          originY: 'center',
+          centeredScaling: true,
+          strokeWidth: 0
+        });
+        canvas.add(rect);
+      }
+      if (vision_v[i][j] == 3) {
+
+
+        let rect = new fabric.Rect({
+          left: (canvas.width / vision_v[i].length) * j,
+          top: canvas.height / 2,
+          fill: 'rgb(0,0,' + 255 / i + ')',
+          width: canvas.width / vision_v[i].length,
+          height: canvas.height / i,
+          originY: 'center',
+          centeredScaling: true,
+          strokeWidth: 0
+        });
+        canvas.add(rect);
+      }
+      if (vision_v[i][j] == 2) {
+
+
+        let rect = new fabric.Rect({
+          left: (canvas.width / vision_v[i].length) * j,
+          top: canvas.height / 2,
+
+          fill: 'rgba(0,' + 255 / i + ',0,0.1)',
           width: canvas.width / vision_v[i].length,
           height: canvas.height / i,
           originY: 'center',

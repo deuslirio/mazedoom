@@ -1,8 +1,10 @@
-vision_indice = 7;
+vision_indice = 5;
 var x;
 var y;
 
 function get_sub_matriz(matriz, i1, j1, i2, j2) {
+  //  Meteor.call('log', matriz, function(error, result) {});
+// console.log(i1,j1,i2,j2)
   max_i = i2 - i1;
   max_j = j2 - j1;
   // console.log(max_i,max_j)
@@ -13,7 +15,7 @@ function get_sub_matriz(matriz, i1, j1, i2, j2) {
   for (var i = 0; i < max_i; i++) {
     for (var j = 0; j < max_j; j++) {
 
-      if (i1 + i >= 0 && j1 + j >= 0) {
+      if (i1 + i >= 0 && j1 + j >= 0 && i1 + i <matriz.length && j1 + j < matriz[j].length) {
         result[i][j] = matriz[i1 + i][j1 + j];
       } else {
         result[i][j] = 0;
@@ -76,8 +78,8 @@ function matriz_vision(m) {
     return arr.slice(0);
   });
 
-  for (var i = 0; i < COLS; i++) {
-    for (var j = 0; j < ROWS; j++) {
+  for (var i = 0; i < m.length; i++) {
+    for (var j = 0; j < m[i].length; j++) {
       if (m[i][j] == 'P') {
         x = i;
         y = j;
@@ -87,6 +89,7 @@ function matriz_vision(m) {
   var result_matriz
   switch (vision_indice) {
     case 0:
+
       result_matriz = get_sub_matriz(m, x - 9, y - 9, x + 1, y + 1);
       break;
     case 1:

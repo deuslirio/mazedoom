@@ -179,7 +179,7 @@ matriz_f_n = function(m) {
   // Meteor.call('log', result_matriz_dist, function(error, result) {});
 
   final_vision = new Array(10)
-  for (var i = 0; i < COLS; i++) {
+  for (var i = 0; i < final_vision.length; i++) {
     final_vision[i] = []
   }
 
@@ -187,7 +187,7 @@ matriz_f_n = function(m) {
     // final_vision[i]=new Array(11)
     for (var j = 0; j < 10; j++) {
 
-      if (result_matriz_dist[i][j] < 10)
+      if (result_matriz_dist[i][j] < 10 && result_matriz_dist[i][j] >=0)
         final_vision[result_matriz_dist[i][j]].push(result_matriz[i][j])
     }
   }
@@ -210,6 +210,8 @@ matriz_f_n = function(m) {
   // }
   // Meteor.call('log', final_vision, function(error, result) {});
 
-  console.log(final_vision);
+  // console.log(final_vision);
+  if(vision_indice==1||vision_indice==2||vision_indice==3||vision_indice==4)
+  final_vision=refletida(final_vision)
   return final_vision;
 }

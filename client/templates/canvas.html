@@ -1,7 +1,29 @@
+
 <template name="canvas">
   <!-- <button>Click Me</button> -->
 
-  <!-- <div id="viewport"> -->
+
+
       <canvas  id='c'></canvas>
-  <!-- </div> -->
+
+
+
+
+
+</template>
+<template name="minimap">
+    {{#each arr map_length}}
+      <p>
+        {{#each map_line this}}
+      <span class='c{{this.cor}}'>
+        {{#each arr this.numero}}
+          P
+          {{/each}}
+          </span>
+
+    {{/each}}
+
+    </p>
+  {{/each}}
+
 </template>

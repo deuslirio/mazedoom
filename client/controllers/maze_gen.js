@@ -1,132 +1,113 @@
-// Meteor.startup(() => {
-  // code to run on server at startup
-  // constantes
-  COLS = 26; // numero de colunas
-  ROWS = 19; // numero de linhas
-  SIZE = 30; // tamanho de cada tile
-  // tiles matriz
-  var tiles = [];
-  // função para buscar os vizinhos disponíveis da posição informada
-  // função para buscar os vizinhos disponíveis da posição informada
-function getAvailable(i,j) {
-    var available = [];
-    var len = tiles[i][j].neighbours.length;
-    for (var ix=0; ix<len; ix++) {
-        var t = tiles[i][j].neighbours[ix];
-        if (!t.visited)
-            available.push( t );
+// // Meteor.startup(() => {
+//   // code to run on server at startup
+//   // constantes
+COLS = 15; // numero de colunas
+ROWS = 15; // numero de linhas
+SIZE = 30; // tamanho de cada tile
+
+function maze(x, y) {
+  // return new Promise((resolve, reject) => {
+  let n = x * y - 1;
+  if (n < 0) {
+    //  reject(new Error(`illegal maze dimensions (${x} x ${y} < 1)`));
+  } else {
+    let horiz = [];
+    for (let j = 0; j < x + 1; j++) horiz[j] = [];
+    let verti = [];
+    for (let j = 0; j < x + 1; j++) verti[j] = [];
+    let here = [Math.floor(Math.random() * x), Math.floor(Math.random() * y)];
+    let path = [here];
+    let unvisited = [];
+    for (let j = 0; j < x + 2; j++) {
+      unvisited[j] = [];
+      for (let k = 0; k < y + 1; k++)
+        unvisited[j].push(j > 0 && j < x + 1 && k > 0 && (j != here[0] + 1 || k != here[1] + 1));
     }
-    return available;
+    while (0 < n) {
+      let potential = [
+        [here[0] + 1, here[1]],
+        [here[0], here[1] + 1],
+        [here[0] - 1, here[1]],
+        [here[0], here[1] - 1]
+      ];
+      let neighbors = [];
+      for (let j = 0; j < 4; j++)
+        if (unvisited[potential[j][0] + 1][potential[j][1] + 1])
+          neighbors.push(potential[j]);
+      if (neighbors.length) {
+        n = n - 1;
+        let next = neighbors[Math.floor(Math.random() * neighbors.length)];
+        unvisited[next[0] + 1][next[1] + 1] = false;
+        if (next[0] == here[0])
+          horiz[next[0]][(next[1] + here[1] - 1) / 2] = true;
+        else
+          verti[(next[0] + here[0] - 1) / 2][next[1]] = true;
+        path.push(here = next);
+      } else
+        here = path.pop();
+    }
+    return ({
+      x: x,
+      y: y,
+      horiz: horiz,
+      verti: verti
+    });
+  }
+
 }
 
-// função para criar as conexões das posições
-function maze(i,j) {
-    // define a posição atual como visitada
-    tiles[i][j].visited = true;
+/**
+* A mere way of generating text.
+* The text (Since it can be large) is generated in a non-blocking way.
 
-    // busca os vizinho disponíveis
-    var available = getAvailable(i,j);
+*/
+generate = function() {
+  m = maze(COLS, ROWS);
+  let text = [];
+  for (let j = 0; j < m.x * 2 + 1; j++) {
+    text[j] = [];
+    if (0 == j % 2)
+      for (let k = 0; k < m.y * 4 + 1; k++)
+        if (0 == k % 4)
+          text[j][k] = 1;
+          // text[j][k] = 0;
 
-    // enquanto houver vizinhos disponíveis
-    while (available.length>0) {
-        // escolhe um vizinho aleatório
-        var neighbor = available[Math.floor(Math.random() * available.length)];
+        else
+    if (j > 0 && m.verti[j / 2 - 1][Math.floor(k / 4)])
+      text[j][k] = 0;
+    else
+      text[j][k] = 1;
+      // text[j][k] = 0;
 
-        // remove o vizinho da lista de vizinhos da posição atual
-        tiles[i][j].neighbours.splice( tiles[i][j].neighbours.indexOf(neighbor), 1 );
+    else
+      for (let k = 0; k < m.y * 4 + 1; k++)
+        if (0 == k % 4)
+          if (k > 0 && m.horiz[(j - 1) / 2][k / 4 - 1])
+            text[j][k] = 0;
+          else
+            text[j][k] = 1;
+            // text[j][k] = 0;
 
-        // remove a posição atual da lista do vizinho
-        neighbor.neighbours.splice( neighbor.neighbours.indexOf(tiles[i][j]), 1 );
+    else
+      text[j][k] = 0;
+    // Meteor.call('log', text.length, function(error, result) {});
 
-        // executa o processo no vizinho
-        maze(neighbor.col,neighbor.row);
+    // if (0 == j) text[j][1] = text[j][2] = text[j][3] = 0;
+    // if (m.x*2-1 == j) line[4*m.y]= 0;
+    // text.push(line.join('')+'\r\n');
+  }
+  // Meteor.call('log', text[0].length, function(error, result) {});
+  // console.log(text)
+  text[1][1] = 'P';
+  text[text.length - 2][text[text.length - 2].length-2] = '3';
 
-        // busca os vizinhos que ainda estão disponíveis
-        available = getAvailable(i,j);
-    }
+  // text[43][70] = 3;
+  // Meteor.call('log', [text.length-2,text[text.length - 2].length-2], function(error, result) {});
+
+  return text
+  // const OUTPUT = text.join('');
+  // if (typeof writeTo === 'function')
+  // 	writeTo(OUTPUT);
+  // resolve(OUTPUT);
+
 }
-
-// função para gerar o labirinto
-generate=function() {
-    // cria os tiles com sua posição, lista de vizinhos e se ele foi visitado
-    for (var i=0; i<COLS; i++) {
-        tiles[i] = [];
-        for (var j=0; j<ROWS; j++) {
-            tiles[i][j] = {row:j,col:i,visited:false,neighbours:[]}
-        }
-    }
-
-    // adiciona os vizinhos nas listas
-    for (var i=0; i<COLS; i++) {
-        for (var j=0; j<ROWS; j++) {
-            if (i>0) tiles[i][j].neighbours.push(tiles[i-1][j]); // a oeste
-            if (j>0) tiles[i][j].neighbours.push(tiles[i][j-1]); // ao norte
-            if (i<COLS-1) tiles[i][j].neighbours.push(tiles[i+1][j]); // ao leste
-            if (j<ROWS-1) tiles[i][j].neighbours.push(tiles[i][j+1]); // sao sul
-        }
-    }
-
-    // inicio o processo de criação a partir do primeira posição
-    maze(0,0);
-    var maze_map = new Array(COLS);
-
-    for (var i = 0; i < COLS; i++) {
-      maze_map[i] = new Array(ROWS);
-    }
-    // desenha o labirinto
-    // var canvas = document.getElementById("gameCanvas");
-    // var ctx = canvas.getContext("2d");
-    // ctx.clearRect(0,0,800,600);
-
-    for (var i=0; i<COLS; i++) {
-        for (var j=0; j<ROWS; j++) {
-            // var px = i*SIZE+10;
-            // var py = j*SIZE+15;
-            var tile = tiles[i][j];
-            //
-            // ctx.beginPath();
-            // ctx.moveTo(px,py);
-
-
-          // norte
-          if (j > 0 && tile.neighbours.indexOf(tiles[i][j - 1]) < 0)
-            // ctx.moveTo(px+SIZE,py);
-            maze_map[i][j - 1] = 0;
-          else
-            // ctx.lineTo(px+SIZE,py);
-            maze_map[i][j - 1] = 1;
-
-          // leste
-          if (i < COLS - 1 && tile.neighbours.indexOf(tiles[i + 1][j]) < 0)
-            // ctx.moveTo(px+SIZE,py+SIZE);
-            maze_map[i][j] = 0;
-          else
-            // ctx.lineTo(px+SIZE,py+SIZE);
-            maze_map[i][j] = 1;
-
-          // sul
-          if (j < ROWS - 1 && tile.neighbours.indexOf(tiles[i][j + 1]) < 0)
-            // ctx.moveTo(px,py+SIZE);
-            maze_map[i][j + 1] = 0;
-          else
-
-            // ctx.lineTo(px,py+SIZE);
-            maze_map[i][j + 1] = 1;
-
-          // oeste
-          if (i > 0 && tile.neighbours.indexOf(tiles[i - 1][j]) < 0)
-            // ctx.moveTo(px,py);
-            maze_map[i][j] = 0;
-          else
-            // // ctx.lineTo(px,py);
-            //
-            maze_map[i][j] = 1;
-          // // ctx.stroke();
-        }
-      }
-      //  console.log(maze_map);
-      maze_map[1][1]='P';
-      return maze_map;
-    }
-
-// });
